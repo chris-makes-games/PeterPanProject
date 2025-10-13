@@ -39,17 +39,26 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Background2
+  - name: TreeBackground
     uniqueID: 2554593461
     locked: 0
-  - name: Background1
+  - name: GroundBackground
     uniqueID: 2545474125
     locked: 0
-  - name: Obstacles
+  - name: WaterBackground
+    uniqueID: 190523859
+    locked: 0
+  - name: Trees
     uniqueID: 1133957895
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Obstacles
+    uniqueID: 3289280501
+    locked: 0
+  - name: UI
+    uniqueID: 2384042991
     locked: 0
   m_RenderingLayers:
   - Default
