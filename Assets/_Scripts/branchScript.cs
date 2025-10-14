@@ -11,7 +11,8 @@ public class branchScript : MonoBehaviour
     {
         startPos = transform.localPosition;
         float random_x = UnityEngine.Random.Range(1.0f, 10.0f);
-        float random_y = UnityEngine.Random.Range(1.0f, 10.0f);
+        float random_y = UnityEngine.Random.Range(3.0f, 15.0f);
+        endPos = new Vector2(random_x, random_y);
     }
 
 
