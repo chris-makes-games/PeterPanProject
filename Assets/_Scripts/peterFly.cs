@@ -2,34 +2,41 @@ using UnityEngine;
 
 public class peterFly : MonoBehaviour
 {
-    public float flySpeed;
+    [Header("Movement Settings")]
+    public float flySpeed = 5f;
 
-    Rigidbody2D rb;
-
-    float horizontalInput;
-    float verticalInput;
+    private Rigidbody2D rb;
+    private float horizontalInput;
+    private float verticalInput;
 
     // Camera reference for bounds
-    Camera mainCam;
-    float minX, maxX, minY, maxY;
+    private Camera mainCam;
+    private float minX, maxX, minY, maxY;
+
+    [Header("Health Settings")]
+    public int maxHealth = 5;
+    private int currentHealth;
+    private bool isFalling = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         mainCam = Camera.main;
 
-        // calculate bounds at start
         UpdateBounds();
+        currentHealth = maxHealth;
     }
 
     void FixedUpdate()
     {
+        if (isFalling) return; // Disable movement when falling
+
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
+
         Vector2 movement = new Vector2(horizontalInput * flySpeed, verticalInput * flySpeed);
         rb.linearVelocity = movement;
 
-        // clamp position to camera bounds
         Vector3 pos = transform.position;
         pos.x = Mathf.Clamp(pos.x, minX, maxX);
         pos.y = Mathf.Clamp(pos.y, minY, maxY);
@@ -45,5 +52,46 @@ public class peterFly : MonoBehaviour
         maxX = mainCam.transform.position.x + camWidth;
         minY = mainCam.transform.position.y - camHeight;
         maxY = mainCam.transform.position.y + camHeight;
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Cannonball"))
+        {
+            TakeDamage(1);
+        }
+    }
+
+    void TakeDamage(int amount)
+    {
+        currentHealth -= amount;
+        Debug.Log($"Peter Pan took {amount} damage! Remaining health: {currentHealth}");
+
+        if (currentHealth <= 0 && !isFalling)
+        {
+            FallAndDie();
+        }
+    }
+
+    void FallAndDie()
+    {
+        Debug.Log("Peter Pan has been defeated and is falling!");
+
+        isFalling = true;
+
+        // Enable gravity and increase fall speed
+        rb.gravityScale = 5f; // increased gravity for faster fall
+
+        // Stop flying movement
+        rb.linearVelocity = Vector2.zero;
+
+        // Flip upside down visually
+        transform.rotation = Quaternion.Euler(0, 0, 180f);
+
+        // Add spin for dramatic fall
+        rb.angularVelocity = 500f;
+
+        // Destroy Peter after 2.5 seconds (enough to fall off-screen)
+        Destroy(gameObject, 2.5f);
     }
 }
