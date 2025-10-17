@@ -5,13 +5,10 @@ TagManager:
   serializedVersion: 3
   tags:
   - Background
-<<<<<<< HEAD
   - Cannonball
-=======
   - Tree
   - Obstacle
   - TreeDestroy
->>>>>>> 47a65522c193463f4b261effc593f2d30cb3ab04
   layers:
   - Default
   - TransparentFX
