@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - Background
+  - Tree
+  - Obstacle
+  - TreeDestroy
   layers:
   - Default
   - TransparentFX
@@ -42,14 +45,14 @@ TagManager:
   - name: TreeBackground
     uniqueID: 2554593461
     locked: 0
+  - name: Trees
+    uniqueID: 1133957895
+    locked: 0
   - name: GroundBackground
     uniqueID: 2545474125
     locked: 0
   - name: WaterBackground
     uniqueID: 190523859
-    locked: 0
-  - name: Trees
-    uniqueID: 1133957895
     locked: 0
   - name: Default
     uniqueID: 0
