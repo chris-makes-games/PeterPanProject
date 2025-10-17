@@ -40,12 +40,13 @@ public class BackgroundScroller : MonoBehaviour
         // Check if the first background tile is off-screen and reposition it
         if (backgrounds[0].position.x < -backgroundWidth)
         {
-            // Move the first tile to the right of the second tile
-            backgrounds[0].position = new Vector3(backgrounds[1].position.x + backgroundWidth, backgrounds[0].position.y, backgrounds[0].position.z);
-            // Swap the order in the array to maintain the "first" and "second" tile concept
+            // Move the first tile to the right of the third tile (changes to three tiles)
+            backgrounds[0].position = new Vector3(backgrounds[1].position.x + backgroundWidth * 2, backgrounds[0].position.y, backgrounds[0].position.z);
+            // Swap the order in the array to maintain first/second/third tiles
             Transform temp = backgrounds[0];
             backgrounds[0] = backgrounds[1];
-            backgrounds[1] = temp;
+            backgrounds[1] = backgrounds[2];
+            backgrounds[2] = temp;
         }
     }
 }
