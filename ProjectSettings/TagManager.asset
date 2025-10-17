@@ -5,7 +5,13 @@ TagManager:
   serializedVersion: 3
   tags:
   - Background
+<<<<<<< HEAD
   - Cannonball
+=======
+  - Tree
+  - Obstacle
+  - TreeDestroy
+>>>>>>> 47a65522c193463f4b261effc593f2d30cb3ab04
   layers:
   - Default
   - TransparentFX
@@ -44,16 +50,26 @@ TagManager:
     uniqueID: 1707686319
     locked: 0
   - name: Background2
+  - name: TreeBackground
     uniqueID: 2554593461
     locked: 0
-  - name: Background1
+  - name: Trees
+    uniqueID: 1133957895
+    locked: 0
+  - name: GroundBackground
     uniqueID: 2545474125
     locked: 0
-  - name: Obstacles
-    uniqueID: 1133957895
+  - name: WaterBackground
+    uniqueID: 190523859
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Obstacles
+    uniqueID: 3289280501
+    locked: 0
+  - name: UI
+    uniqueID: 2384042991
     locked: 0
   m_RenderingLayers:
   - Default
