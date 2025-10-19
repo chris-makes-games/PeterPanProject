@@ -157,5 +157,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::fairyScript
   fairySpeed: 20
-  minHeight: 0
+  minHeight: -10
   maxHeight: 10
