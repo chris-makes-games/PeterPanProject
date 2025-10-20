@@ -648,6 +648,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd7597ccb97193346b863805bb0fc69e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  startTreeSpeed: 30
+  startFairySpeed: 25
+  startBackSpeedTree: 20
+  startBackSpeedGround: 25
+  startBackSpeedWater1: 30
+  startBackSpeedWater2: 35
   difficulty: 0.1
   spawner: {fileID: 622084068}
   tree: {fileID: 3881115093227907965, guid: fceb82e0f584d814ba8b7a1d01b2eb13, type: 3}

@@ -54,4 +54,9 @@ public class BackgroundScroller : MonoBehaviour
     {
         scrollSpeed += speed * Time.deltaTime;
     }
+
+    public void setSpeed(float speed)
+    {
+        scrollSpeed = speed;
+    }
 }
