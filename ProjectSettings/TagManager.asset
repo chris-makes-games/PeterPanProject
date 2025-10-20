@@ -43,10 +43,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Foreground
-    uniqueID: 1707686319
-    locked: 0
   - name: Background2
+    uniqueID: 1
+    locked: 0
   - name: TreeBackground
     uniqueID: 2554593461
     locked: 0
@@ -64,6 +63,12 @@ TagManager:
     locked: 0
   - name: Obstacles
     uniqueID: 3289280501
+    locked: 0
+  - name: Hook
+    uniqueID: 2584220853
+    locked: 0
+  - name: Foreground
+    uniqueID: 1707686319
     locked: 0
   - name: UI
     uniqueID: 2384042991
