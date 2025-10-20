@@ -4,7 +4,7 @@ using UnityEngine;
 public class treeScript : MonoBehaviour
 {
     //how fast tree moves to left
-    public float treeSpeed;
+    public float treeSpeed = 20f;
 
     //branch difficulty curve
     //use between 0 and 100
@@ -34,7 +34,7 @@ public class treeScript : MonoBehaviour
     {
         
         //always spawns at least one branch
-        generateBranch();
+        generateBranch(currentBranches);
         //start with that one branch
         currentBranches = 1;
 
@@ -45,7 +45,7 @@ public class treeScript : MonoBehaviour
             float randomChance = Random.Range(0, 100f);
             if (randomChance < branchDensity)
             {
-                generateBranch();
+                generateBranch(currentBranches);
             }
             currentBranches++; //increments even if branch isn't created
         }
@@ -57,7 +57,7 @@ public class treeScript : MonoBehaviour
         transform.position += Time.deltaTime * treeSpeed * Vector3.left;
     }
 
-    void generateBranch()
+    void generateBranch(int currentBranch)
     {
         //choose spot on trunk to begin branch
         float startRandom_y = UnityEngine.Random.Range(lowestBranch, highestBranch);
@@ -87,6 +87,8 @@ public class treeScript : MonoBehaviour
 
         //place leaves at endpoint of branches
         GameObject newLeaves = Instantiate(leaves, endBranch, Quaternion.identity, this.transform);
+        SpriteRenderer spriteRenderer = newLeaves.GetComponent<SpriteRenderer>();
+        spriteRenderer.sortingOrder = currentBranch;
 
     }
 
@@ -96,6 +98,11 @@ public class treeScript : MonoBehaviour
         {
             Destroy(gameObject); //destroys self when passing into destroy area
         }
+    }
+
+    public void increaseSpeed(float speed)
+    {
+        treeSpeed += speed * Time.deltaTime;
     }
 
 
