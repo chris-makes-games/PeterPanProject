@@ -18,6 +18,9 @@ public class peterFly : MonoBehaviour
     private int currentHealth;
     private bool isFalling = false;
 
+    // Reference to Game UI Manager
+    private GameUIManager uiManager;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -25,6 +28,13 @@ public class peterFly : MonoBehaviour
 
         UpdateBounds();
         currentHealth = maxHealth;
+
+        // Find the UI manager in the scene
+        uiManager = FindFirstObjectByType<GameUIManager>();
+
+        // Initialize UI health
+        if (uiManager != null)
+            uiManager.UpdateHealth(currentHealth, maxHealth);
     }
 
     void FixedUpdate()
@@ -65,7 +75,15 @@ public class peterFly : MonoBehaviour
     void TakeDamage(int amount)
     {
         currentHealth -= amount;
+        currentHealth = Mathf.Max(currentHealth, 0);
+
         Debug.Log($"Peter Pan took {amount} damage! Remaining health: {currentHealth}");
+
+        // Update UI health display
+        if (uiManager != null)
+        {
+            uiManager.UpdateHealth(currentHealth, maxHealth);
+        }
 
         if (currentHealth <= 0 && !isFalling)
         {
@@ -80,7 +98,7 @@ public class peterFly : MonoBehaviour
         isFalling = true;
 
         // Enable gravity and increase fall speed
-        rb.gravityScale = 5f; // increased gravity for faster fall
+        rb.gravityScale = 5f;
 
         // Stop flying movement
         rb.linearVelocity = Vector2.zero;
