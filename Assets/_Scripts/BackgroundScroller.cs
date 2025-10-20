@@ -50,6 +50,7 @@ public class BackgroundScroller : MonoBehaviour
         }
     }
 
+    //getters and setters for difficulty curve
     public void increaseSpeed(float speed)
     {
         scrollSpeed += speed * Time.deltaTime;
@@ -58,5 +59,10 @@ public class BackgroundScroller : MonoBehaviour
     public void setSpeed(float speed)
     {
         scrollSpeed = speed;
+    }
+
+    public float getSpeed()
+    {
+        return scrollSpeed;
     }
 }

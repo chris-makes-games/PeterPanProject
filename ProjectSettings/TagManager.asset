@@ -9,6 +9,7 @@ TagManager:
   - Tree
   - Obstacle
   - TreeDestroy
+  - Fairy
   layers:
   - Default
   - TransparentFX

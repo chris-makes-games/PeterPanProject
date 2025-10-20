@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class spawnControl : MonoBehaviour
 {
@@ -32,12 +33,43 @@ public class spawnControl : MonoBehaviour
             {
                 Instantiate(tree, transform.position, Quaternion.identity); //spawn tree if density high enough
             }
-            else
+            float randomFairy = Random.Range(0, 100f);
+            if (randomFairy < fairyDensity)
             {
-                Instantiate(fairy, transform.position, Quaternion.identity); //makes fairy where tree would be
+                Instantiate(fairy, transform.position, Quaternion.identity); //makes fairy
             }
             
         }
         
+    }
+    //getters and setters for difficulty
+    public void setTreeDensity(float density)
+    {
+        treeDensity = density;
+    }
+
+    public void setFairyDensity(float density)
+    {
+        fairyDensity = density;
+    }
+
+    public float getTreeDensity()
+    {
+        return treeDensity;
+    }
+
+    public float getFairyDensity()
+    {
+        return fairyDensity;
+    }
+
+    public float getInterval()
+    {
+        return treeTimer;
+    }
+
+    public void setInterval(float newInterval)
+    {
+        treeTimer = newInterval;
     }
 }
