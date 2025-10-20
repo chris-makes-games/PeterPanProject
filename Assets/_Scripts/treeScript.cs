@@ -4,7 +4,7 @@ using UnityEngine;
 public class treeScript : MonoBehaviour
 {
     //how fast tree moves to left
-    public float treeSpeed;
+    public float treeSpeed = 20f;
 
     //branch difficulty curve
     //use between 0 and 100
@@ -32,22 +32,22 @@ public class treeScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //starts at zero branches
-        currentBranches = 0;
-
+        
         //always spawns at least one branch
-        generateBranch();
+        generateBranch(currentBranches);
+        //start with that one branch
+        currentBranches = 1;
 
         //chance to spawn more branches depending on density
-        //tries each time for maxBranches, might spawn every time
+        //tries each time until maxBranches, might spawn every time
         while (currentBranches < maxBranches)
         {
             float randomChance = Random.Range(0, 100f);
             if (randomChance < branchDensity)
             {
-                generateBranch();
+                generateBranch(currentBranches);
             }
-            currentBranches++;
+            currentBranches++; //increments even if branch isn't created
         }
     }
 
@@ -57,7 +57,7 @@ public class treeScript : MonoBehaviour
         transform.position += Time.deltaTime * treeSpeed * Vector3.left;
     }
 
-    void generateBranch()
+    void generateBranch(int currentBranch)
     {
         //choose spot on trunk to begin branch
         float startRandom_y = UnityEngine.Random.Range(lowestBranch, highestBranch);
@@ -65,19 +65,19 @@ public class treeScript : MonoBehaviour
 
         //choose spot to end branch
         //allows x to be negative and go left, but branches always go upwards
-        float endRandom_x = UnityEngine.Random.Range(-maxBranchX - 1, maxBranchX + 1);
-        float endRandom_y = UnityEngine.Random.Range(0, maxBranchY);
+        float endRandom_x = UnityEngine.Random.Range(-maxBranchX - 4, maxBranchX + 4); //minimum distance of 4 away from trunk
+        float endRandom_y = UnityEngine.Random.Range(0, maxBranchY + 4); //minimum distance of 4 upwards
         endBranch = new Vector2(startBranch.x + endRandom_x, startBranch.y + endRandom_y);
 
         //Calculate direction and distance between start and end branch
-        Vector2 direction = endBranch - startBranch;
-        float length = direction.magnitude;
-        Vector2 midpoint = startBranch + direction / 2f;
+        Vector2 direction = endBranch - startBranch; //new vector2 is difference between start and end
+        float length = direction.magnitude; //magnitude is length of line between points
+        Vector2 midpoint = startBranch + direction / 2f; //add together, divide by 2 to get middle
 
-        //Instantiate the branch at the midpoint
+        //Instantiate the branch at the midpoint as child of tree
         GameObject newBranch = Instantiate(branch, midpoint, Quaternion.identity, this.transform);
 
-        //Create angle usung Mathf to get degree of angle between two points
+        //Create angle usung Mathf to get degree of angle between start and end
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         //transform branch to match the angle of roation between tree and leaves
         newBranch.transform.rotation = Quaternion.Euler(0, 0, angle);
@@ -87,6 +87,8 @@ public class treeScript : MonoBehaviour
 
         //place leaves at endpoint of branches
         GameObject newLeaves = Instantiate(leaves, endBranch, Quaternion.identity, this.transform);
+        SpriteRenderer spriteRenderer = newLeaves.GetComponent<SpriteRenderer>();
+        spriteRenderer.sortingOrder = currentBranch;
 
     }
 
@@ -94,8 +96,13 @@ public class treeScript : MonoBehaviour
     {
         if (collision.CompareTag("TreeDestroy"))
         {
-            Destroy(gameObject);
+            Destroy(gameObject); //destroys self when passing into destroy area
         }
+    }
+
+    public void increaseSpeed(float speed)
+    {
+        treeSpeed += speed * Time.deltaTime;
     }
 
 
