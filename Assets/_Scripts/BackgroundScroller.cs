@@ -49,4 +49,9 @@ public class BackgroundScroller : MonoBehaviour
             backgrounds[2] = temp;
         }
     }
+
+    public void increaseSpeed(float speed)
+    {
+        scrollSpeed += speed * Time.deltaTime;
+    }
 }
