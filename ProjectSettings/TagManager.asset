@@ -52,5 +52,8 @@ TagManager:
   - name: First
     uniqueID: 3708991207
     locked: 0
+  - name: GameOver
+    uniqueID: 801849837
+    locked: 0
   m_RenderingLayers:
   - Default
