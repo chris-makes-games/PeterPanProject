@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class peterFly : MonoBehaviour
+public class BossPeter : MonoBehaviour
 {
     [Header("Movement Settings")]
     public float flySpeed = 5f;
@@ -18,11 +18,15 @@ public class peterFly : MonoBehaviour
     private int currentHealth;
     private bool isFalling = false;
 
-    // Reference to Game UI Manager
+    // Reference to UI Managers
     private GameUIManager uiManager;
+    private GameOverManager gameOverManager;
 
     // For flipping direction
-    private bool facingRight = true; // true = facing right, false = facing left
+    private bool facingRight = true;
+
+    [Header("Game Over Settings")]
+    public float fallYLimit = -6f; // When Peter falls below this Y, trigger Game Over
 
     void Start()
     {
@@ -32,8 +36,9 @@ public class peterFly : MonoBehaviour
         UpdateBounds();
         currentHealth = maxHealth;
 
-        // Find the UI manager in the scene
+        // Find UI Managers in the scene
         uiManager = FindFirstObjectByType<GameUIManager>();
+        gameOverManager = FindFirstObjectByType<GameOverManager>();
 
         // Initialize UI health
         if (uiManager != null)
@@ -42,7 +47,7 @@ public class peterFly : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isFalling) return; // Disable movement when falling
+        if (isFalling) return;
 
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
@@ -63,12 +68,19 @@ public class peterFly : MonoBehaviour
         transform.position = pos;
     }
 
+    void Update()
+    {
+        // Check if Peter has fallen below the Y limit
+        if (isFalling && transform.position.y < fallYLimit)
+        {
+            TriggerGameOverUI();
+            Destroy(gameObject);
+        }
+    }
+
     void Flip()
     {
-        // Reverse facing direction
         facingRight = !facingRight;
-
-        // Flip sprite horizontally by changing local scale
         Vector3 scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
@@ -100,16 +112,11 @@ public class peterFly : MonoBehaviour
 
         Debug.Log($"Peter Pan took {amount} damage! Remaining health: {currentHealth}");
 
-        // Update UI health display
         if (uiManager != null)
-        {
             uiManager.UpdateHealth(currentHealth, maxHealth);
-        }
 
         if (currentHealth <= 0 && !isFalling)
-        {
             FallAndDie();
-        }
     }
 
     void FallAndDie()
@@ -120,8 +127,6 @@ public class peterFly : MonoBehaviour
 
         // Enable gravity and increase fall speed
         rb.gravityScale = 5f;
-
-        // Stop flying movement
         rb.linearVelocity = Vector2.zero;
 
         // Flip upside down visually
@@ -129,8 +134,18 @@ public class peterFly : MonoBehaviour
 
         // Add spin for dramatic fall
         rb.angularVelocity = 500f;
+    }
 
-        // Destroy Peter after 2.5 seconds (enough to fall off-screen)
-        Destroy(gameObject, 2.5f);
+    void TriggerGameOverUI()
+    {
+        if (gameOverManager != null)
+        {
+            gameOverManager.ShowGameOver();
+            Debug.Log("✅ Game Over triggered: Peter fell off-screen!");
+        }
+        else
+        {
+            Debug.LogError("❌ GameOverManager not found in scene!");
+        }
     }
 }
