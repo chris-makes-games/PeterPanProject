@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 643b78f84b8844640a25ba0b77af5168
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - statsText: {instanceID: 0}
+  - victoryBackground: {instanceID: 0}
+  - victoryText: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

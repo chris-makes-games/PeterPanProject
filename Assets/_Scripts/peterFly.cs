@@ -30,6 +30,12 @@ public class peterFly : MonoBehaviour
     public GameObject difficultyManager;
     private difficultyCurve curve;
 
+    // Reference to Game UI Manager
+    private GameUIManager uiManager;
+
+    // For flipping direction
+    private bool facingRight = true; // true = facing right, false = facing left
+
     void Start()
     {
         //script access for difficulty
@@ -42,6 +48,13 @@ public class peterFly : MonoBehaviour
 
         UpdateBounds();
         currentHealth = maxHealth;
+
+        // Find the UI manager in the scene
+        uiManager = FindFirstObjectByType<GameUIManager>();
+
+        // Initialize UI health
+        if (uiManager != null)
+            uiManager.UpdateHealth(currentHealth, maxHealth);
     }
 
     void FixedUpdate()
@@ -54,10 +67,28 @@ public class peterFly : MonoBehaviour
         Vector2 movement = new Vector2(horizontalInput * flySpeed, verticalInput * flySpeed);
         rb.linearVelocity = movement;
 
+        // Flip character when changing direction
+        if (horizontalInput > 0 && !facingRight)
+            Flip();
+        else if (horizontalInput < 0 && facingRight)
+            Flip();
+
+        // Clamp position to camera bounds
         Vector3 pos = transform.position;
         pos.x = Mathf.Clamp(pos.x, minX, maxX);
         pos.y = Mathf.Clamp(pos.y, minY, maxY);
         transform.position = pos;
+    }
+
+    void Flip()
+    {
+        // Reverse facing direction
+        facingRight = !facingRight;
+
+        // Flip sprite horizontally by changing local scale
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
     }
 
     void UpdateBounds()
@@ -93,6 +124,12 @@ public class peterFly : MonoBehaviour
         curve.decreaseDifficulty(); //lowers difficulty if player gets hit
         Debug.Log($"Peter Pan took {amount} damage! Remaining health: {currentHealth}");
 
+        // Update UI health display
+        if (uiManager != null)
+        {
+            uiManager.UpdateHealth(currentHealth, maxHealth);
+        }
+
         if (currentHealth <= 0 && !isFalling)
         {
             FallAndDie();
@@ -110,7 +147,7 @@ public class peterFly : MonoBehaviour
         isFalling = true;
 
         // Enable gravity and increase fall speed
-        rb.gravityScale = 5f; // increased gravity for faster fall
+        rb.gravityScale = 5f;
 
         // Stop flying movement
         rb.linearVelocity = Vector2.zero;
