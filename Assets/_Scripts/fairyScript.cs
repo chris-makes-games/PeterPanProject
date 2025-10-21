@@ -42,5 +42,10 @@ public class fairyScript : MonoBehaviour
     {
         fairySpeed += speed * Time.deltaTime;
     }
+
+    public void setSpeed(float speed)
+    {
+        fairySpeed = speed;
+    }
 }
 

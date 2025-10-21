@@ -3,6 +3,14 @@ using UnityEngine.Rendering;
 
 public class difficultyCurve : MonoBehaviour
 {
+    //default speeds
+    public float startTreeSpeed;
+    public float startFairySpeed;
+    public float startBackSpeedTree;
+    public float startBackSpeedGround;
+    public float startBackSpeedWater1;
+    public float startBackSpeedWater2;
+
     //main controller for scaling difficulty
     public float difficulty;
 
@@ -42,6 +50,15 @@ public class difficultyCurve : MonoBehaviour
         ground = groundBackground.GetComponent<BackgroundScroller>();
         water1 = waterBackground1.GetComponent<BackgroundScroller>();
         water2 = waterBackground2.GetComponent<BackgroundScroller>();
+
+        //set starting speeds - reset at every game
+        treeControl.setSpeed(startTreeSpeed);
+        fairyControl.setSpeed(startFairySpeed);
+
+        trees.setSpeed(startBackSpeedTree);
+        ground.setSpeed(startBackSpeedGround);
+        water1.setSpeed(startBackSpeedWater1);
+        water2.setSpeed(startBackSpeedWater2);
     }
 
     // Update is called once per frame

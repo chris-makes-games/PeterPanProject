@@ -105,6 +105,11 @@ public class treeScript : MonoBehaviour
         treeSpeed += speed * Time.deltaTime;
     }
 
+    public void setSpeed(float speed)
+    {
+        treeSpeed = speed;
+    }
+
 
 
 
