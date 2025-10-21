@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class peterFly : MonoBehaviour
 {
@@ -17,6 +18,17 @@ public class peterFly : MonoBehaviour
     public int maxHealth = 5;
     private int currentHealth;
     private bool isFalling = false;
+    private bool isInvincible = false;
+    private float invincibleDuration = 2f;
+
+    //used for color change
+    SpriteRenderer spriteRenderer;
+    Color normal = new Color(1f, 1f, 1f);
+    Color damaged = new Color(1f, .3f, .3f);
+
+    //used to manage difficulty curve
+    public GameObject difficultyManager;
+    private difficultyCurve curve;
 
     // Reference to Game UI Manager
     private GameUIManager uiManager;
@@ -26,6 +38,11 @@ public class peterFly : MonoBehaviour
 
     void Start()
     {
+        //script access for difficulty
+        curve = difficultyManager.GetComponent<difficultyCurve>();
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        
         rb = GetComponent<Rigidbody2D>();
         mainCam = Camera.main;
 
@@ -87,17 +104,24 @@ public class peterFly : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Cannonball"))
+        if (collision.gameObject.CompareTag("Cannonball") || collision.gameObject.CompareTag("Obstacle"))
         {
-            TakeDamage(1);
+            TakeDamage(1); //takes damage on cannonball or obstacle
+        }       
+        if (collision.gameObject.CompareTag("Fairy"))
+        {
+            curve.increaseDifficulty();
+            curve.fairyCollected();
+            Destroy(collision.gameObject); //destroys fairy
         }
     }
 
     void TakeDamage(int amount)
     {
-        currentHealth -= amount;
-        currentHealth = Mathf.Max(currentHealth, 0);
+        if(isInvincible) return;//stops damage if player is invincible
 
+        currentHealth -= amount; //lowers HP
+        curve.decreaseDifficulty(); //lowers difficulty if player gets hit
         Debug.Log($"Peter Pan took {amount} damage! Remaining health: {currentHealth}");
 
         // Update UI health display
@@ -109,6 +133,10 @@ public class peterFly : MonoBehaviour
         if (currentHealth <= 0 && !isFalling)
         {
             FallAndDie();
+        }
+        else
+        {
+            StartCoroutine(BecomeTemporarilyInvincible()); //makes player invincible
         }
     }
 
@@ -132,5 +160,18 @@ public class peterFly : MonoBehaviour
 
         // Destroy Peter after 2.5 seconds (enough to fall off-screen)
         Destroy(gameObject, 2.5f);
+    }
+
+    // using this tutorial for i-frames: https://www.aleksandrhovhannisyan.com/blog/invulnerability-frames-in-unity
+    //player goes invulnarable for fixed duration after taking damage
+    private IEnumerator BecomeTemporarilyInvincible()
+    {
+        Debug.Log("Player turned invincible!");
+        isInvincible = true;
+        spriteRenderer.color = damaged;
+        yield return new WaitForSeconds(invincibleDuration); //invinvible for fixed duration
+        isInvincible = false;
+        spriteRenderer.color = normal;
+        Debug.Log("Player is no longer invincible!");
     }
 }

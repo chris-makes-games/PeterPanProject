@@ -9,6 +9,7 @@ TagManager:
   - TreeDestroy
   - Tree
   - Obstacle
+  - Fairy
   - DestroyZone
   layers:
   - Default

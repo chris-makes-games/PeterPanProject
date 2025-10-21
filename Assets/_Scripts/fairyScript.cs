@@ -32,12 +32,13 @@ public class fairyScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("TreeDestroy") || collision.CompareTag("Player"))
+        if (collision.CompareTag("TreeDestroy"))
         {
-            Destroy(gameObject); //destroys self when passing into destroy area or collected by player
+            Destroy(gameObject); //destroys self when passing into destroy area
         }
     }
 
+    //getters and setters for difficulty curve
     public void increaseSpeed(float speed)
     {
         fairySpeed += speed * Time.deltaTime;
@@ -46,6 +47,11 @@ public class fairyScript : MonoBehaviour
     public void setSpeed(float speed)
     {
         fairySpeed = speed;
+    }
+
+    public float getSpeed()
+    {
+        return fairySpeed;
     }
 }
 

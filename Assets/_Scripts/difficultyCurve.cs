@@ -1,18 +1,27 @@
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class difficultyCurve : MonoBehaviour
 {
-    //default speeds
+    //fairies to collect until next scene
+    public int fairiesNeeded;
+
+    //defaults - resets every game
     public float startTreeSpeed;
     public float startFairySpeed;
     public float startBackSpeedTree;
     public float startBackSpeedGround;
     public float startBackSpeedWater1;
     public float startBackSpeedWater2;
+    public float startTreeDensity;
+    public float startFairyDensity;
+    public float startInterval;
 
-    //main controller for scaling difficulty
+
+    //controllers for scaling difficulty
     public float difficulty;
+    public float forgivenessCurve;
+    public float punishmentCurve;
 
     //spawns objects faster
     public GameObject spawner;
@@ -32,6 +41,7 @@ public class difficultyCurve : MonoBehaviour
     private spawnControl spawnControl;
     private fairyScript fairyControl;
     
+    //gameobjects for background scroll speeds
     private BackgroundScroller trees;
     private BackgroundScroller ground;
     private BackgroundScroller water1;
@@ -40,9 +50,11 @@ public class difficultyCurve : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //game object scripts
-        treeControl = tree.GetComponent<treeScript>();
+        //gameobject controller for density and timing
         spawnControl = spawner.GetComponent<spawnControl>();
+
+        //game object scripts for basic speed
+        treeControl = tree.GetComponent<treeScript>();
         fairyControl = fairy.gameObject.GetComponent<fairyScript>();
 
         //backgrounds
@@ -52,24 +64,75 @@ public class difficultyCurve : MonoBehaviour
         water2 = waterBackground2.GetComponent<BackgroundScroller>();
 
         //set starting speeds - reset at every game
-        treeControl.setSpeed(startTreeSpeed);
-        fairyControl.setSpeed(startFairySpeed);
-
         trees.setSpeed(startBackSpeedTree);
         ground.setSpeed(startBackSpeedGround);
         water1.setSpeed(startBackSpeedWater1);
         water2.setSpeed(startBackSpeedWater2);
+
+        treeControl.setSpeed(startTreeSpeed);
+        fairyControl.setSpeed(startFairySpeed);
+
+        spawnControl.setTreeDensity(startTreeDensity);
+        spawnControl.setFairyDensity(startFairyDensity);
+        spawnControl.setInterval(startInterval);
     }
 
     // Update is called once per frame
     void Update()
     {
-        trees.increaseSpeed(difficulty);
-        ground.increaseSpeed(difficulty);
-        water1.increaseSpeed(difficulty);
-        water2.increaseSpeed(difficulty);
+        //scrolling speed for backgrounds
+        trees.increaseSpeed(difficulty * Time.deltaTime);
+        ground.increaseSpeed(difficulty * Time.deltaTime);
+        water1.increaseSpeed(difficulty * Time.deltaTime);
+        water2.increaseSpeed(difficulty * Time.deltaTime);
 
-        treeControl.increaseSpeed(difficulty);
-        fairyControl.increaseSpeed(difficulty);
+        //movement speed for trees/fairies
+        treeControl.increaseSpeed(difficulty * Time.deltaTime);
+        fairyControl.increaseSpeed(difficulty * Time.deltaTime);
+
+        //tree density
+        spawnControl.setTreeDensity(spawnControl.getTreeDensity() + difficulty * Time.deltaTime); 
+        spawnControl.setInterval(spawnControl.getInterval() - difficulty * Time.deltaTime * 0.01f); //shorter interval, very small decrement
+        //fairy density unchanged - don't want lots of them
+        
+    }
+
+    public void fairyCollected()
+    {
+        fairiesNeeded--;
+        if (fairiesNeeded <= 0) //collected all the fairies
+        {
+            SceneManager.LoadScene("BossScene");
+        }
+    }
+
+    public void increaseDifficulty() //increases difficulty by fixed amount
+    {
+        trees.setSpeed(trees.getSpeed() + punishmentCurve);
+        ground.setSpeed(ground.getSpeed() + punishmentCurve);
+        water1.setSpeed(water1.getSpeed() + punishmentCurve);
+        water2.setSpeed(water2.getSpeed() + punishmentCurve);
+
+        treeControl.setSpeed(treeControl.getSpeed() + punishmentCurve);
+        fairyControl.setSpeed(fairyControl.getSpeed() + punishmentCurve);
+
+        spawnControl.setTreeDensity(spawnControl.getTreeDensity() + punishmentCurve);
+        spawnControl.setInterval(spawnControl.getInterval() + punishmentCurve * 0.1f);
+    }
+
+    public void decreaseDifficulty() //decreases difficulty by fixed amount
+    {
+        trees.setSpeed(trees.getSpeed() - forgivenessCurve);
+        ground.setSpeed(ground.getSpeed() - forgivenessCurve);
+        water1.setSpeed(water1.getSpeed() - forgivenessCurve);
+        water2.setSpeed(water2.getSpeed() - forgivenessCurve);
+
+        treeControl.setSpeed(treeControl.getSpeed() - forgivenessCurve);
+        fairyControl.setSpeed(fairyControl.getSpeed() - forgivenessCurve);
+
+        spawnControl.setTreeDensity(spawnControl.getTreeDensity() - forgivenessCurve);
+        //increase these to lower difficulty:
+        spawnControl.setInterval(spawnControl.getInterval() + forgivenessCurve * 0.1f);
+        spawnControl.setFairyDensity(spawnControl.getFairyDensity() + forgivenessCurve);
     }
 }

@@ -100,6 +100,7 @@ public class treeScript : MonoBehaviour
         }
     }
 
+    //getters and setters for difficulty curve
     public void increaseSpeed(float speed)
     {
         treeSpeed += speed * Time.deltaTime;
@@ -108,6 +109,10 @@ public class treeScript : MonoBehaviour
     public void setSpeed(float speed)
     {
         treeSpeed = speed;
+    }
+    public float getSpeed()
+    {
+        return treeSpeed;
     }
 
 
