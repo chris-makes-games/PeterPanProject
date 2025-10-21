@@ -11,7 +11,7 @@ public class CannonBall : MonoBehaviour
     public float angleVariation = 10f;    // Random firing angle in degrees
 
     // Fixed world position to spawn cannonballs
-    private readonly Vector3 fixedSpawnPosition = new Vector3(6.67f, -1.2f, 0f);
+    private readonly Vector3 fixedSpawnPosition = new Vector3(2.36f, -1.24f, 0f);
 
     void Start()
     {

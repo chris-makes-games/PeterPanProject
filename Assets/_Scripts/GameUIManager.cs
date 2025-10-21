@@ -1,20 +1,28 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameUIManager : MonoBehaviour
 {
     public TextMeshProUGUI statsText;
 
+    [Header("Victory UI")]
+    public GameObject victoryBackground;
+    public GameObject victoryText;
+
     private int maxHealth = 5;
     private int currentHealth;
     private int maxDust = 5;
-    private int collectedDust;
+    private int collectedDust = 0;
+    private bool wendySaved = false;
 
     void Start()
     {
         currentHealth = maxHealth;
-        collectedDust = 0;
         UpdateUI();
+
+        if (victoryBackground != null) victoryBackground.SetActive(false);
+        if (victoryText != null) victoryText.SetActive(false);
     }
 
     public void UpdateHealth(int newHealth, int max)
@@ -24,15 +32,45 @@ public class GameUIManager : MonoBehaviour
         UpdateUI();
     }
 
-    // Ensure only one Fairy Dust adds per collection
-    public void AddDust(int amount)
+    public void AddFairyDust(int amount)
     {
-        // Only add once, prevent duplicate increments
-        if (collectedDust < maxDust)
+        if (wendySaved) return;
+
+        collectedDust += amount;
+        if (collectedDust >= maxDust)
         {
-            collectedDust += 1;
-            UpdateUI();
+            collectedDust = maxDust;
+            TriggerVictory();
         }
+
+        UpdateUI();
+    }
+
+    private void TriggerVictory()
+    {
+        Debug.Log("🎉 Wendy Saved! Victory Triggered!");
+        wendySaved = true;
+        ShowVictoryScreen();
+    }
+
+    private void ShowVictoryScreen()
+    {
+        if (victoryBackground != null)
+        {
+            victoryBackground.SetActive(true);
+            Image bg = victoryBackground.GetComponent<Image>();
+            bg.color = Color.white;
+        }
+
+        if (victoryText != null)
+        {
+            victoryText.SetActive(true);
+            TextMeshProUGUI text = victoryText.GetComponent<TextMeshProUGUI>();
+            text.text = "Wendy Saved!";
+            text.color = Color.black;
+        }
+
+        Time.timeScale = 0f;
     }
 
     private void UpdateUI()

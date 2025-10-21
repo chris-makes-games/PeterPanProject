@@ -4,12 +4,9 @@ public class BossPeter : MonoBehaviour
 {
     [Header("Movement Settings")]
     public float flySpeed = 5f;
-
     private Rigidbody2D rb;
-    private float horizontalInput;
-    private float verticalInput;
+    private float horizontalInput, verticalInput;
 
-    // Camera reference for bounds
     private Camera mainCam;
     private float minX, maxX, minY, maxY;
 
@@ -18,31 +15,30 @@ public class BossPeter : MonoBehaviour
     private int currentHealth;
     private bool isFalling = false;
 
-    // Reference to UI Managers
     private GameUIManager uiManager;
     private GameOverManager gameOverManager;
-
-    // For flipping direction
     private bool facingRight = true;
 
     [Header("Game Over Settings")]
-    public float fallYLimit = -6f; // When Peter falls below this Y, trigger Game Over
+    public float fallYLimit = -6f;
+
+    [Header("Fairy Dust Settings")]
+    public GameObject fairyDustPrefab;
+    public Transform firePoint;       
+    public float shootCooldown = 0.5f;
+    private float lastShootTime;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         mainCam = Camera.main;
-
         UpdateBounds();
         currentHealth = maxHealth;
 
-        // Find UI Managers in the scene
         uiManager = FindFirstObjectByType<GameUIManager>();
         gameOverManager = FindFirstObjectByType<GameOverManager>();
 
-        // Initialize UI health
-        if (uiManager != null)
-            uiManager.UpdateHealth(currentHealth, maxHealth);
+        uiManager?.UpdateHealth(currentHealth, maxHealth);
     }
 
     void FixedUpdate()
@@ -51,17 +47,10 @@ public class BossPeter : MonoBehaviour
 
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
+        rb.linearVelocity = new Vector2(horizontalInput * flySpeed, verticalInput * flySpeed);
 
-        Vector2 movement = new Vector2(horizontalInput * flySpeed, verticalInput * flySpeed);
-        rb.linearVelocity = movement;
+        if ((horizontalInput > 0 && !facingRight) || (horizontalInput < 0 && facingRight)) Flip();
 
-        // Flip character when changing direction
-        if (horizontalInput > 0 && !facingRight)
-            Flip();
-        else if (horizontalInput < 0 && facingRight)
-            Flip();
-
-        // Clamp position to camera bounds
         Vector3 pos = transform.position;
         pos.x = Mathf.Clamp(pos.x, minX, maxX);
         pos.y = Mathf.Clamp(pos.y, minY, maxY);
@@ -70,12 +59,37 @@ public class BossPeter : MonoBehaviour
 
     void Update()
     {
-        // Check if Peter has fallen below the Y limit
         if (isFalling && transform.position.y < fallYLimit)
         {
-            TriggerGameOverUI();
+            gameOverManager?.ShowGameOver();
             Destroy(gameObject);
         }
+
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time - lastShootTime > shootCooldown)
+        {
+            ShootFairyDust();
+            lastShootTime = Time.time;
+        }
+    }
+
+    void ShootFairyDust()
+    {
+        if (fairyDustPrefab == null || firePoint == null)
+        {
+            Debug.LogWarning("⚠️ No Fairy Dust Prefab or FirePoint set!");
+            return;
+        }
+
+        GameObject dust = Instantiate(fairyDustPrefab, firePoint.position, Quaternion.identity);
+
+        Rigidbody2D rbDust = dust.GetComponent<Rigidbody2D>();
+        if (rbDust != null)
+        {
+            rbDust.gravityScale = 2f;
+            rbDust.linearVelocity = Vector2.down * 2f;
+        }
+
+        Debug.Log("✨ Fairy Dust success！");
     }
 
     void Flip()
@@ -90,7 +104,6 @@ public class BossPeter : MonoBehaviour
     {
         float camHeight = mainCam.orthographicSize;
         float camWidth = camHeight * mainCam.aspect;
-
         minX = mainCam.transform.position.x - camWidth;
         maxX = mainCam.transform.position.x + camWidth;
         minY = mainCam.transform.position.y - camHeight;
@@ -99,53 +112,22 @@ public class BossPeter : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Cannonball"))
-        {
-            TakeDamage(1);
-        }
+        if (collision.gameObject.CompareTag("Cannonball")) TakeDamage(1);
     }
 
     void TakeDamage(int amount)
     {
-        currentHealth -= amount;
-        currentHealth = Mathf.Max(currentHealth, 0);
-
-        Debug.Log($"Peter Pan took {amount} damage! Remaining health: {currentHealth}");
-
-        if (uiManager != null)
-            uiManager.UpdateHealth(currentHealth, maxHealth);
-
-        if (currentHealth <= 0 && !isFalling)
-            FallAndDie();
+        currentHealth = Mathf.Max(currentHealth - amount, 0);
+        uiManager?.UpdateHealth(currentHealth, maxHealth);
+        if (currentHealth <= 0 && !isFalling) FallAndDie();
     }
 
     void FallAndDie()
     {
-        Debug.Log("Peter Pan has been defeated and is falling!");
-
         isFalling = true;
-
-        // Enable gravity and increase fall speed
         rb.gravityScale = 5f;
         rb.linearVelocity = Vector2.zero;
-
-        // Flip upside down visually
         transform.rotation = Quaternion.Euler(0, 0, 180f);
-
-        // Add spin for dramatic fall
         rb.angularVelocity = 500f;
-    }
-
-    void TriggerGameOverUI()
-    {
-        if (gameOverManager != null)
-        {
-            gameOverManager.ShowGameOver();
-            Debug.Log("✅ Game Over triggered: Peter fell off-screen!");
-        }
-        else
-        {
-            Debug.LogError("❌ GameOverManager not found in scene!");
-        }
     }
 }
