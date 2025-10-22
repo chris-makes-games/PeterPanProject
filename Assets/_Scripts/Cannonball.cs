@@ -38,7 +38,7 @@ public class CannonBall : MonoBehaviour
         }
 
         // Calculate direction toward the player
-        Vector2 firePos = fixedSpawnPosition;
+        Vector2 firePos = transform.position; //I changed this to just the position - chris
         Vector2 direction = (player.transform.position - (Vector3)firePos).normalized;
 
         // Add small random angle for more natural effect

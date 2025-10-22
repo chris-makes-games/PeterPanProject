@@ -35,6 +35,7 @@ public class peterFly : MonoBehaviour
 
     // For flipping direction
     private bool facingRight = true; // true = facing right, false = facing left
+    public bool isFlippable = true;
 
     void Start()
     {
@@ -68,9 +69,10 @@ public class peterFly : MonoBehaviour
         rb.linearVelocity = movement;
 
         // Flip character when changing direction
-        if (horizontalInput > 0 && !facingRight)
+        // adding logic to prevent flip for chase scene
+        if (isFlippable && horizontalInput > 0 && !facingRight)
             Flip();
-        else if (horizontalInput < 0 && facingRight)
+        else if (isFlippable && horizontalInput < 0 && facingRight)
             Flip();
 
         // Clamp position to camera bounds
