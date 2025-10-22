@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd6dbc940b1d32147aaa6ce6603edef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::fairyScript
-  fairySpeed: 24.879353
+  fairySpeed: 19.544317
   minHeight: -15
   maxHeight: 15
 --- !u!114 &516528985930243977

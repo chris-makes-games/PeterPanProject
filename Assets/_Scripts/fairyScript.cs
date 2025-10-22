@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 public class fairyScript : MonoBehaviour
@@ -12,12 +11,12 @@ public class fairyScript : MonoBehaviour
     {
         transform.position = new Vector2(transform.position.x, Random.Range(minHeight, maxHeight)); //random position
 
-        //random hue near to purple
+        //random hue near to yellow
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         Light2D light = GetComponent<Light2D>();
-        float red = Random.Range(.12f, 1f);
-        float green = Random.Range(0, .12f);
-        float blue = Random.Range(.12f, 1f);
+        float red = Random.Range(.7f, .1f);
+        float green = Random.Range(.7f, 1f);
+        float blue = Random.Range(0, .1f);
         //sets color
         spriteRenderer.color = new Color(red, green, blue);
         light.color = new Color(red, green, blue);

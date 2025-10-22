@@ -117,7 +117,7 @@ public class difficultyCurve : MonoBehaviour
         fairyControl.setSpeed(fairyControl.getSpeed() + punishmentCurve);
 
         spawnControl.setTreeDensity(spawnControl.getTreeDensity() + punishmentCurve);
-        spawnControl.setInterval(spawnControl.getInterval() + punishmentCurve * 0.1f);
+        spawnControl.setInterval(spawnControl.getInterval() - punishmentCurve * 0.1f);
     }
 
     public void decreaseDifficulty() //decreases difficulty by fixed amount
