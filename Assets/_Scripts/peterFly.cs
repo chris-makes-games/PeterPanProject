@@ -32,6 +32,7 @@ public class peterFly : MonoBehaviour
 
     // Reference to Game UI Manager
     private GameUIManager uiManager;
+    public GameOverManager gameOver;
 
     // For flipping direction
     private bool facingRight = true; // true = facing right, false = facing left
@@ -110,7 +111,11 @@ public class peterFly : MonoBehaviour
         {
             TakeDamage(1); //takes damage on cannonball or obstacle
         }       
-        if (collision.gameObject.CompareTag("Fairy"))
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Fairy"))
         {
             curve.increaseDifficulty();
             curve.fairyCollected();
@@ -160,8 +165,15 @@ public class peterFly : MonoBehaviour
         // Add spin for dramatic fall
         rb.angularVelocity = 500f;
 
-        // Destroy Peter after 2.5 seconds (enough to fall off-screen)
-        Destroy(gameObject, 2.5f);
+        //shows game over screen after 2.5seconds
+        StartCoroutine(gameOverWait());
+
+    }
+
+    IEnumerator gameOverWait()
+    {
+        yield return new WaitForSeconds(2.5f); // Waits for specified seconds
+        gameOver.ShowGameOver();
     }
 
     // using this tutorial for i-frames: https://www.aleksandrhovhannisyan.com/blog/invulnerability-frames-in-unity
