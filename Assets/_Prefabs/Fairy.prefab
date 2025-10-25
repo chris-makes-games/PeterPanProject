@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2990309890484215505, guid: 8b4d9f3e52c398448afd1193b6490016, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.91426474, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd6dbc940b1d32147aaa6ce6603edef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::fairyScript
-  fairySpeed: 19.544317
+  fairySpeed: 20
   minHeight: -15
   maxHeight: 15
 --- !u!114 &516528985930243977
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.589
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9596671, g: 0.9924528, b: 0, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0

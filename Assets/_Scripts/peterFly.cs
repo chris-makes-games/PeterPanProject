@@ -21,6 +21,11 @@ public class peterFly : MonoBehaviour
     private bool isInvincible = false;
     private float invincibleDuration = 2f;
 
+    //health bar stuff
+    public GameObject healthBar;
+    public Sprite[] healthSprites;
+    private SpriteRenderer healthbarSprite;
+
     //used for color change
     SpriteRenderer spriteRenderer;
     Color normal = new Color(1f, 1f, 1f);
@@ -44,6 +49,9 @@ public class peterFly : MonoBehaviour
         curve = difficultyManager.GetComponent<difficultyCurve>();
 
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        //health bar with hearts
+        healthbarSprite = healthBar.GetComponent<SpriteRenderer>();
         
         rb = GetComponent<Rigidbody2D>();
         mainCam = Camera.main;
@@ -67,6 +75,10 @@ public class peterFly : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
 
         Vector2 movement = new Vector2(horizontalInput * flySpeed, verticalInput * flySpeed);
+        if (!isFlippable && movement.x < 0)//if peter is going left in chase scene
+        {
+            movement.x *= 1.5f; //go left 50% faster
+        }
         rb.linearVelocity = movement;
 
         // Flip character when changing direction
@@ -127,7 +139,9 @@ public class peterFly : MonoBehaviour
     {
         if(isInvincible) return;//stops damage if player is invincible
 
+        
         currentHealth -= amount; //lowers HP
+        healthbarSprite.sprite = healthSprites[currentHealth];//changes heart sprite
         curve.decreaseDifficulty(); //lowers difficulty if player gets hit
         Debug.Log($"Peter Pan took {amount} damage! Remaining health: {currentHealth}");
 
