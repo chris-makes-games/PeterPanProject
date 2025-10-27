@@ -49,7 +49,7 @@ public class peterFly : MonoBehaviour
 
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        //health bar with hearts
+        //health script
         healthScript = healthBar.GetComponent<healthUpdate>();
         
         rb = GetComponent<Rigidbody2D>();
@@ -193,12 +193,14 @@ public class peterFly : MonoBehaviour
     //player goes invulnarable for fixed duration after taking damage
     private IEnumerator BecomeTemporarilyInvincible()
     {
-        Debug.Log("Player turned invincible!");
         isInvincible = true;
         spriteRenderer.color = damaged;
         yield return new WaitForSeconds(invincibleDuration); //invinvible for fixed duration
         isInvincible = false;
-        spriteRenderer.color = normal;
-        Debug.Log("Player is no longer invincible!");
+        if (currentHealth > 0) //change back to normal sprite unless dead
+        {
+            spriteRenderer.color = normal;
+        }
+        
     }
 }
