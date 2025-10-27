@@ -23,8 +23,7 @@ public class peterFly : MonoBehaviour
 
     //health bar stuff
     public GameObject healthBar;
-    public Sprite[] healthSprites;
-    private SpriteRenderer healthbarSprite;
+    private healthUpdate healthScript;
 
     //used for color change
     SpriteRenderer spriteRenderer;
@@ -51,7 +50,7 @@ public class peterFly : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         //health bar with hearts
-        healthbarSprite = healthBar.GetComponent<SpriteRenderer>();
+        healthScript = healthBar.GetComponent<healthUpdate>();
         
         rb = GetComponent<Rigidbody2D>();
         mainCam = Camera.main;
@@ -141,7 +140,7 @@ public class peterFly : MonoBehaviour
 
         
         currentHealth -= amount; //lowers HP
-        healthbarSprite.sprite = healthSprites[currentHealth];//changes heart sprite
+        healthScript.changeSprite(currentHealth);
         curve.decreaseDifficulty(); //lowers difficulty if player gets hit
         Debug.Log($"Peter Pan took {amount} damage! Remaining health: {currentHealth}");
 
