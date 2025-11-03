@@ -45,12 +45,20 @@ public class peterFly : MonoBehaviour
     //object for spawning fairy dust
     public GameObject fairyDust;
 
+    //for sounds playing on collisions
+    public AudioSource collideSound;
+    public AudioSource fairySound;
+    private AudioSource chaseMusic;
+
     void Start()
     {
         //script access for difficulty
         curve = difficultyManager.GetComponent<difficultyCurve>();
 
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        //chase music
+        chaseMusic = GetComponent<AudioSource>();
 
         //health script
         healthScript = healthBar.GetComponent<healthUpdate>();
@@ -131,6 +139,7 @@ public class peterFly : MonoBehaviour
     {
         if (collision.CompareTag("Fairy"))
         {
+            fairySound.Play();
             curve.increaseDifficulty();
             curve.fairyCollected();
             Destroy(collision.gameObject); //destroys fairy
@@ -148,7 +157,7 @@ public class peterFly : MonoBehaviour
     {
         if(isInvincible) return;//stops damage if player is invincible
 
-        
+        collideSound.Play();
         currentHealth -= amount; //lowers HP
         healthScript.changeSprite(currentHealth);
         curve.decreaseDifficulty(); //lowers difficulty if player gets hit
@@ -162,6 +171,7 @@ public class peterFly : MonoBehaviour
 
         if (currentHealth <= 0 && !isFalling)
         {
+            chaseMusic.Stop();
             FallAndDie();
         }
         else
@@ -175,6 +185,7 @@ public class peterFly : MonoBehaviour
         Debug.Log("Peter Pan has been defeated and is falling!");
 
         isFalling = true;
+        spriteRenderer.color = damaged;
 
         // Enable gravity and increase fall speed
         rb.gravityScale = 5f;
