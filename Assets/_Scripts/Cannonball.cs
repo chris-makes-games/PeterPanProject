@@ -4,18 +4,27 @@ using System.Collections;
 public class CannonBall : MonoBehaviour
 {
     [Header("Cannon Settings")]
-    public GameObject cannonballPrefab;   // The cannonball prefab
-    public float fireRate = 2f;           // Interval between shots (seconds)
-    public float speed = 6f;              // Cannonball speed
-    public float destroyTime = 5f;        // Lifetime before auto-destroy
-    public float angleVariation = 10f;    // Random firing angle in degrees
+    public GameObject cannonballPrefab;       // Normal cannonball prefab
+    public GameObject homingCannonballPrefab; // Homing cannonball prefab
+    public float fireRate = 2f;               // Interval between volleys
+    public float speed = 6f;                  // Normal shot speed
+    public float destroyTime = 5f;            // Auto destroy after X seconds
+    public float baseAngleVariation = 5f;     // Small random offset for realism
 
-    // Fixed world position to spawn cannonballs
-    private readonly Vector3 fixedSpawnPosition = new Vector3(2.36f, -1.24f, 0f);
+    [Header("Multi-Shot Settings")]
+    public int projectileCount = 3;           // How many cannonballs in multi-shot
+    public float spreadAngle = 15f;           // Angle between cannonballs
+    [Range(0f, 1f)]
+    public float multiShotChance = 0.2f;      // Chance (0-1) for triple shot
+
+    [Header("Homing Settings")]
+    [Range(0f, 1f)]
+    public float homingChance = 0.1f;         // Chance (0-1) for homing missile
+    public float homingSpeed = 4f;            // Homing missile speed
+    public float rotationSpeed = 200f;        // How fast it turns toward player
 
     void Start()
     {
-        // Start repeating fire loop
         StartCoroutine(FireLoop());
     }
 
@@ -23,46 +32,94 @@ public class CannonBall : MonoBehaviour
     {
         while (true)
         {
-            FireOnce();
-            yield return new WaitForSeconds(fireRate); // Wait between shots
+            Fire();
+            yield return new WaitForSeconds(fireRate);
         }
     }
 
-    void FireOnce()
+    void Fire()
     {
         GameObject player = GameObject.FindWithTag("Player");
-        if (player == null || cannonballPrefab == null)
+        if (player == null)
         {
-            Debug.LogWarning("Cannonball prefab or Player not found!");
+            Debug.LogWarning("⚠️ Player not found!");
             return;
         }
 
-        // Calculate direction toward the player
-        Vector2 firePos = transform.position; //I changed this to just the position - chris
-        Vector2 direction = (player.transform.position - (Vector3)firePos).normalized;
+        Vector2 firePos = transform.position;
+        Vector2 baseDir = (player.transform.position - (Vector3)firePos).normalized;
 
-        // Add small random angle for more natural effect
-        float randomAngle = Random.Range(-angleVariation, angleVariation);
-        direction = Quaternion.Euler(0, 0, randomAngle) * direction;
-
-        // Instantiate cannonball
-        GameObject newBall = Instantiate(cannonballPrefab, firePos, Quaternion.identity);
-
-        // Apply velocity
-        Rigidbody2D rb = newBall.GetComponent<Rigidbody2D>();
-        if (rb != null)
+        // 🎯 Determine which mode to use
+        float roll = Random.value;
+        if (roll < homingChance)
         {
-            rb.linearVelocity = direction * speed;
+            FireHoming(firePos, player.transform);
         }
-
-        // Destroy after a few seconds
-        Destroy(newBall, destroyTime);
+        else if (roll < homingChance + multiShotChance)
+        {
+            FireMultiple(firePos, baseDir);
+        }
+        else
+        {
+            FireSingle(firePos, baseDir);
+        }
     }
 
-    // Draw a red dot in Scene view to show spawn point
+    void FireSingle(Vector2 firePos, Vector2 baseDir)
+    {
+        float randomOffset = Random.Range(-baseAngleVariation, baseAngleVariation);
+        Vector2 dir = Quaternion.Euler(0, 0, randomOffset) * baseDir;
+        SpawnBall(cannonballPrefab, firePos, dir, speed);
+    }
+
+    void FireMultiple(Vector2 firePos, Vector2 baseDir)
+    {
+        int middle = projectileCount / 2;
+        for (int i = 0; i < projectileCount; i++)
+        {
+            float offset = (i - middle) * spreadAngle + Random.Range(-baseAngleVariation, baseAngleVariation);
+            Vector2 dir = Quaternion.Euler(0, 0, offset) * baseDir;
+            SpawnBall(cannonballPrefab, firePos, dir, speed);
+        }
+        Debug.Log($"💥 Multi-shot triggered! {projectileCount} balls fired!");
+    }
+
+    void FireHoming(Vector2 firePos, Transform target)
+    {
+        if (homingCannonballPrefab == null)
+        {
+            Debug.LogWarning("⚠️ No homing cannonball prefab assigned!");
+            return;
+        }
+
+        GameObject homing = Instantiate(homingCannonballPrefab, firePos, Quaternion.identity);
+        HomingCannonball hc = homing.GetComponent<HomingCannonball>();
+        if (hc != null)
+        {
+            hc.target = target;
+            hc.moveSpeed = homingSpeed;
+            hc.rotateSpeed = rotationSpeed;
+        }
+
+        Destroy(homing, destroyTime);
+        Debug.Log("🎯 Homing cannonball launched!");
+    }
+
+    void SpawnBall(GameObject prefab, Vector2 pos, Vector2 dir, float spd)
+    {
+        if (prefab == null) return;
+
+        GameObject ball = Instantiate(prefab, pos, Quaternion.identity);
+        Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
+        if (rb != null)
+            rb.linearVelocity = dir * spd;
+
+        Destroy(ball, destroyTime);
+    }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(new Vector3(-0.8999f, -1.324f, 0f), 0.1f);
+        Gizmos.DrawWireSphere(transform.position, 0.1f);
     }
 }

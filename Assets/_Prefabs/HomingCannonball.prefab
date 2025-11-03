@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 5789702463395840791}
   - component: {fileID: 2187474604766831635}
   - component: {fileID: 3291385523684230760}
-  - component: {fileID: 6132024283837659297}
+  - component: {fileID: -8101828808527708482}
   m_Layer: 0
-  m_Name: Cannonball
+  m_Name: HomingCannonball
   m_TagString: Cannonball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,8 +118,8 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 4
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!58 &3291385523684230760
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -156,7 +156,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: -0.0011203096, y: 0.03}
   m_Radius: 0.24957871
---- !u!114 &6132024283837659297
+--- !u!114 &-8101828808527708482
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -165,6 +165,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1557609499347440568}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a697e2947098c44ceb0c64f059b22764, type: 3}
+  m_Script: {fileID: 11500000, guid: 34d46a460f53c47c4acd35cf24f9823c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CannonballCollision
+  m_EditorClassIdentifier: Assembly-CSharp::HomingCannonball
+  target: {fileID: 0}
+  moveSpeed: 4
+  rotateSpeed: 200
+  lifetime: 5

@@ -22,11 +22,8 @@ public class BossPeter : MonoBehaviour
     [Header("Game Over Settings")]
     public float fallYLimit = -6f;
 
-    [Header("Fairy Dust Settings")]
-    public GameObject fairyDustPrefab;
-    public Transform firePoint;       
-    public float shootCooldown = 0.5f;
-    private float lastShootTime;
+    [Header("Health Sprite Visuals")]
+    public healthUpdate healthVisual; // reference to the visual sprite health bar
 
     void Start()
     {
@@ -39,6 +36,12 @@ public class BossPeter : MonoBehaviour
         gameOverManager = FindFirstObjectByType<GameOverManager>();
 
         uiManager?.UpdateHealth(currentHealth, maxHealth);
+
+        // Try to auto-find healthUpdate if not assigned manually
+        if (healthVisual == null)
+        {
+            healthVisual = GetComponentInChildren<healthUpdate>();
+        }
     }
 
     void FixedUpdate()
@@ -59,37 +62,12 @@ public class BossPeter : MonoBehaviour
 
     void Update()
     {
+        // Check if falling below screen
         if (isFalling && transform.position.y < fallYLimit)
         {
             gameOverManager?.ShowGameOver();
             Destroy(gameObject);
         }
-
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time - lastShootTime > shootCooldown)
-        {
-            ShootFairyDust();
-            lastShootTime = Time.time;
-        }
-    }
-
-    void ShootFairyDust()
-    {
-        if (fairyDustPrefab == null || firePoint == null)
-        {
-            Debug.LogWarning("⚠️ No Fairy Dust Prefab or FirePoint set!");
-            return;
-        }
-
-        GameObject dust = Instantiate(fairyDustPrefab, firePoint.position, Quaternion.identity);
-
-        Rigidbody2D rbDust = dust.GetComponent<Rigidbody2D>();
-        if (rbDust != null)
-        {
-            rbDust.gravityScale = 2f;
-            rbDust.linearVelocity = Vector2.down * 2f;
-        }
-
-        Debug.Log("✨ Fairy Dust success！");
     }
 
     void Flip()
@@ -112,14 +90,24 @@ public class BossPeter : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Cannonball")) TakeDamage(1);
+        if (collision.gameObject.CompareTag("Cannonball"))
+        {
+            TakeDamage(1);
+        }
     }
 
     void TakeDamage(int amount)
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0);
+
+        // Update UI heart icons
         uiManager?.UpdateHealth(currentHealth, maxHealth);
-        if (currentHealth <= 0 && !isFalling) FallAndDie();
+
+        // Update sprite-based health bar with jitter
+        healthVisual?.changeSprite(currentHealth);
+
+        if (currentHealth <= 0 && !isFalling)
+            FallAndDie();
     }
 
     void FallAndDie()
