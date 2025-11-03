@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd6dbc940b1d32147aaa6ce6603edef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::fairyScript
-  fairySpeed: 20
+  fairySpeed: 30.552237
   minHeight: -15
   maxHeight: 15
 --- !u!114 &516528985930243977
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 01000000b500449807d396434ddab897d3295b0b00000000f56f0ec4b514089aaf39c965ef9b198e
+  m_ApplyToSortingLayers: 01000000b500449807d396434ddab89700000000b514089aaf39c965
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0

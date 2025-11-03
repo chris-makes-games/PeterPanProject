@@ -44,6 +44,10 @@ public class difficultyCurve : MonoBehaviour
     private treeScript treeControl;
     private spawnControl spawnControl;
     private fairyScript fairyControl;
+
+    //controls the fairy dust meter
+    public GameObject fairyBar;
+    public fairyBar fairyBarScript;
     
     //gameobjects for background scroll speeds
     private BackgroundScroller trees;
@@ -56,6 +60,9 @@ public class difficultyCurve : MonoBehaviour
     {
         //player object health for tracking perfect run
         playerScript = player.GetComponent<peterFly>();
+
+        //fairy bar script to move mask
+        fairyBarScript = fairyBar.GetComponent<fairyBar>();
 
         //gameobject controller for density and timing
         spawnControl = spawner.GetComponent<spawnControl>();
@@ -106,6 +113,7 @@ public class difficultyCurve : MonoBehaviour
 
     public void fairyCollected()
     {
+        fairyBarScript.MoveBarUp();
         int currentHealth = playerScript.getPlayerHealth(); //gets current health from player before check
         fairiesNeeded--;
         if (currentHealth == 5 && fairiesNeeded <= 0) //collected all the fairies AND no hits taken
