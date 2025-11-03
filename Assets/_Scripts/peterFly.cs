@@ -42,9 +42,6 @@ public class peterFly : MonoBehaviour
     private bool facingRight = true; // true = facing right, false = facing left
     public bool isFlippable = true;
 
-    //object for spawning fairy dust
-    public GameObject fairyDust;
-
     //for sounds playing on collisions
     public AudioSource collideSound;
     public AudioSource fairySound;
@@ -143,14 +140,7 @@ public class peterFly : MonoBehaviour
             curve.increaseDifficulty();
             curve.fairyCollected();
             Destroy(collision.gameObject); //destroys fairy
-            generateDust();
         }
-    }
-
-    void generateDust() //generates 6 dust particles 
-    {
-        //I tried to get dust to spawn here but I wasn't sure how - Chris
-
     }
 
     void TakeDamage(int amount)
