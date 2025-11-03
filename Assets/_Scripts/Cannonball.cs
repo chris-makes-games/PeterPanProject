@@ -23,6 +23,9 @@ public class CannonBall : MonoBehaviour
     public float homingSpeed = 4f;            // Homing missile speed
     public float rotationSpeed = 200f;        // How fast it turns toward player
 
+    //sound of cannon firing
+    public AudioSource cannonSound;
+
     void Start()
     {
         StartCoroutine(FireLoop());
@@ -77,6 +80,7 @@ public class CannonBall : MonoBehaviour
         int middle = projectileCount / 2;
         for (int i = 0; i < projectileCount; i++)
         {
+            cannonSound.Play();
             float offset = (i - middle) * spreadAngle + Random.Range(-baseAngleVariation, baseAngleVariation);
             Vector2 dir = Quaternion.Euler(0, 0, offset) * baseDir;
             SpawnBall(cannonballPrefab, firePos, dir, speed);
@@ -92,6 +96,7 @@ public class CannonBall : MonoBehaviour
             return;
         }
 
+        cannonSound.Play();
         GameObject homing = Instantiate(homingCannonballPrefab, firePos, Quaternion.identity);
         HomingCannonball hc = homing.GetComponent<HomingCannonball>();
         if (hc != null)
@@ -109,6 +114,7 @@ public class CannonBall : MonoBehaviour
     {
         if (prefab == null) return;
 
+        cannonSound.Play();
         GameObject ball = Instantiate(prefab, pos, Quaternion.identity);
         Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
         if (rb != null)

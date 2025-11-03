@@ -18,6 +18,14 @@ public class spaceSkip : MonoBehaviour
             {
                 SceneManager.LoadScene("BossScene");
             }
+            else if (SceneManager.GetActiveScene().name == "End")
+            {
+                SceneManager.LoadScene("Credits");
+            }
+            else if (SceneManager.GetActiveScene().name == "EndSkip")
+            {
+                SceneManager.LoadScene("Credits");
+            }
         }
     }
 }
