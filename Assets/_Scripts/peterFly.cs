@@ -42,6 +42,9 @@ public class peterFly : MonoBehaviour
     private bool facingRight = true; // true = facing right, false = facing left
     public bool isFlippable = true;
 
+    //object for spawning fairy dust
+    public GameObject fairyDust;
+
     void Start()
     {
         //script access for difficulty
@@ -131,7 +134,14 @@ public class peterFly : MonoBehaviour
             curve.increaseDifficulty();
             curve.fairyCollected();
             Destroy(collision.gameObject); //destroys fairy
+            generateDust();
         }
+    }
+
+    void generateDust() //generates 6 dust particles 
+    {
+        //I tried to get dust to spawn here but I wasn't sure how - Chris
+
     }
 
     void TakeDamage(int amount)
@@ -202,5 +212,10 @@ public class peterFly : MonoBehaviour
             spriteRenderer.color = normal;
         }
         
+    }
+
+    public int getPlayerHealth()
+    {
+        return currentHealth;
     }
 }

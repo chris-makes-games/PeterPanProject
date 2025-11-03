@@ -30,6 +30,10 @@ public class difficultyCurve : MonoBehaviour
     public GameObject tree;
     public GameObject fairy;
 
+    //player object for health
+    public GameObject player;
+    public peterFly playerScript;
+
     //backgrounds to scroll faster
     public GameObject treeBackgorund;
     public GameObject groundBackground;
@@ -50,6 +54,9 @@ public class difficultyCurve : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //player object health for tracking perfect run
+        playerScript = player.GetComponent<peterFly>();
+
         //gameobject controller for density and timing
         spawnControl = spawner.GetComponent<spawnControl>();
 
@@ -99,12 +106,17 @@ public class difficultyCurve : MonoBehaviour
 
     public void fairyCollected()
     {
+        int currentHealth = playerScript.getPlayerHealth(); //gets current health from player before check
         fairiesNeeded--;
-        if (fairiesNeeded <= 0) //collected all the fairies
+        if (currentHealth == 5 && fairiesNeeded <= 0) //collected all the fairies AND no hits taken
         {
-            SceneManager.LoadScene("BossScene");
+            SceneManager.LoadScene("EndSkip");//skips the boss fight, secret ending
         }
-    }
+        else if (fairiesNeeded <= 0) //collected all fairies
+        {
+            SceneManager.LoadScene("BossScene");//goes to boss scene
+        }
+        }
 
     public void increaseDifficulty() //increases difficulty by fixed amount
     {
