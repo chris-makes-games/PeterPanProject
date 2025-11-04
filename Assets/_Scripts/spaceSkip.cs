@@ -26,6 +26,10 @@ public class spaceSkip : MonoBehaviour
             {
                 SceneManager.LoadScene("Credits");
             }
+            else if (SceneManager.GetActiveScene().name == "Credits")
+            {
+                Application.Quit();
+            }
         }
     }
 }
