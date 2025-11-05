@@ -761,7 +761,7 @@ Transform:
   m_GameObject: {fileID: 236414793}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.48, y: 4.52, z: 0}
+  m_LocalPosition: {x: -7.02, y: 4.29, z: 0}
   m_LocalScale: {x: 0.65011793, y: 0.5256346, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -911,7 +911,6 @@ MonoBehaviour:
   heartEmpty: {fileID: -5807300337447395838, guid: 01385c7afb89c4b4a8fb39507c9eb01b, type: 3}
   victoryBackground: {fileID: 630888819}
   victoryText: {fileID: 1714563756}
-  heartIconSize: {x: 20, y: 20}
 --- !u!1 &260594465
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,7 +1005,7 @@ MonoBehaviour:
   cannonballPrefab: {fileID: 1557609499347440568, guid: 31f8daec9c7e74982a629413ae32067a, type: 3}
   homingCannonballPrefab: {fileID: 1557609499347440568, guid: 003eb39a098074bbb89e1119b922f41c, type: 3}
   fireRate: 1
-  speed: 10
+  speed: 5
   destroyTime: 5
   baseAngleVariation: 10
   projectileCount: 3
@@ -1219,6 +1218,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 260594466}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &515496685
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 515496686}
+  - component: {fileID: 515496687}
+  m_Layer: 0
+  m_Name: FairyDustManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &515496686
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515496685}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.09749, y: -0.11825, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &515496687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515496685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b50d51d3305fe4559a6bbd26757e1085, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FairyDustSpawner
+  fairyDustPrefab: {fileID: 3527411081479532766, guid: 1c2ec0927b6d047ac9e67c2efddf6019, type: 3}
+  spawnAreaMin: {x: -7, y: -3}
+  spawnAreaMax: {x: 7, y: 3}
+  spawnInterval: 10
+  dustLifetime: 30
 --- !u!1 &617174993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1627,6 +1675,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 260594466}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1450135429
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1450135430}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1450135430
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450135429}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4, y: -1.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1714563756
 GameObject:
@@ -2098,3 +2177,5 @@ SceneRoots:
   - {fileID: 4638709105483860125}
   - {fileID: 236414796}
   - {fileID: 109217829}
+  - {fileID: 515496686}
+  - {fileID: 1450135430}

@@ -21,7 +21,13 @@ public class GameOverManager : MonoBehaviour
 
     public void RestartGame()
     {
+        // ✅ Unpause game
         Time.timeScale = 1f;
+
+        // ✅ Reset Fairy Dust progress counter before reloading
+        FairyDustItem.ResetDeliveredCount();
+
+        // ✅ Reload current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

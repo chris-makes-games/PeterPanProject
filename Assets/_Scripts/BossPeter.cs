@@ -15,7 +15,6 @@ public class BossPeter : MonoBehaviour
     private int currentHealth;
     private bool isFalling = false;
 
-    private GameUIManager uiManager;
     private GameOverManager gameOverManager;
     private bool facingRight = true;
 
@@ -23,25 +22,28 @@ public class BossPeter : MonoBehaviour
     public float fallYLimit = -6f;
 
     [Header("Health Sprite Visuals")]
-    public healthUpdate healthVisual; // reference to the visual sprite health bar
+    public healthUpdate healthVisual; // Reference to sprite-based health bar
+
+    // 🟢 Static flag — track whether the player was ever hit
+    public static bool wasHit = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         mainCam = Camera.main;
         UpdateBounds();
-        currentHealth = maxHealth;
 
-        uiManager = FindFirstObjectByType<GameUIManager>();
+        currentHealth = maxHealth;
+        wasHit = false; // reset flag at start
+
         gameOverManager = FindFirstObjectByType<GameOverManager>();
 
-        uiManager?.UpdateHealth(currentHealth, maxHealth);
-
-        // Try to auto-find healthUpdate if not assigned manually
+        // ensure health sprite is linked
         if (healthVisual == null)
-        {
             healthVisual = GetComponentInChildren<healthUpdate>();
-        }
+
+        // initialize full health visual
+        healthVisual?.changeSprite(currentHealth);
     }
 
     void FixedUpdate()
@@ -50,10 +52,14 @@ public class BossPeter : MonoBehaviour
 
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
+
         rb.linearVelocity = new Vector2(horizontalInput * flySpeed, verticalInput * flySpeed);
 
-        if ((horizontalInput > 0 && !facingRight) || (horizontalInput < 0 && facingRight)) Flip();
+        // flip sprite depending on direction
+        if ((horizontalInput > 0 && !facingRight) || (horizontalInput < 0 && facingRight))
+            Flip();
 
+        // clamp position to camera bounds
         Vector3 pos = transform.position;
         pos.x = Mathf.Clamp(pos.x, minX, maxX);
         pos.y = Mathf.Clamp(pos.y, minY, maxY);
@@ -62,7 +68,7 @@ public class BossPeter : MonoBehaviour
 
     void Update()
     {
-        // Check if falling below screen
+        // if player is falling below the screen, trigger game over
         if (isFalling && transform.position.y < fallYLimit)
         {
             gameOverManager?.ShowGameOver();
@@ -93,17 +99,13 @@ public class BossPeter : MonoBehaviour
         if (collision.gameObject.CompareTag("Cannonball"))
         {
             TakeDamage(1);
+            wasHit = true; // mark player as hit
         }
     }
 
     void TakeDamage(int amount)
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0);
-
-        // Update UI heart icons
-        uiManager?.UpdateHealth(currentHealth, maxHealth);
-
-        // Update sprite-based health bar with jitter
         healthVisual?.changeSprite(currentHealth);
 
         if (currentHealth <= 0 && !isFalling)
