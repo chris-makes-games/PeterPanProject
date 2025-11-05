@@ -122,7 +122,7 @@ public class difficultyCurve : MonoBehaviour
         }
         else if (fairiesNeeded <= 0) //collected all fairies
         {
-            SceneManager.LoadScene("Middle");//goes to boss scene title card
+            SceneManager.LoadScene("BossScene");//goes to boss scene
         }
         }
 

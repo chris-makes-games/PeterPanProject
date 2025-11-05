@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 1daed25dd9a556b43af25d3b20d3af80
+guid: 523b548927074114aa751f634d0cc991
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4717561126780394411
-    second: victory2_0
+      213: 4726251164568969396
+    second: save_back_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 19
+  spritePixelsToUnits: 54
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: victory2_0
+      name: save_back_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 375
-        height: 192
+        width: 960
+        height: 540
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: babdfef99d4287140800000000000000
-      internalID: 4717561126780394411
+      spriteID: 4b0e867b464079140800000000000000
+      internalID: 4726251164568969396
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      victory2_0: 4717561126780394411
+      save_back_0: 4726251164568969396
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
